@@ -20,6 +20,18 @@
         td {
             text-align: center;
         }
+        .delete-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -38,25 +50,31 @@
                 <th>質問8</th>
                 <th>質問9</th>
                 <th>質問10</th>
+                <th>一致率 (%)</th>
             </tr>
         </thead>
         <tbody>
-            {% for answer in answers %}
+            {% for result in results %}
                 <tr>
-                    <td>{{ answer.user_number }}</td>
-                    <td>{{ answer.question1 or '-' }}</td>
-                    <td>{{ answer.question2 or '-' }}</td>
-                    <td>{{ answer.question3 or '-' }}</td>
-                    <td>{{ answer.question4 or '-' }}</td>
-                    <td>{{ answer.question5 or '-' }}</td>
-                    <td>{{ answer.question6 or '-' }}</td>
-                    <td>{{ answer.question7 or '-' }}</td>
-                    <td>{{ answer.question8 or '-' }}</td>
-                    <td>{{ answer.question9 or '-' }}</td>
-                    <td>{{ answer.question10 or '-' }}</td>
+                    <td>{{ result.answer.user_number }}</td>
+                    <td>{{ result.answer.question1 or '-' }}</td>
+                    <td>{{ result.answer.question2 or '-' }}</td>
+                    <td>{{ result.answer.question3 or '-' }}</td>
+                    <td>{{ result.answer.question4 or '-' }}</td>
+                    <td>{{ result.answer.question5 or '-' }}</td>
+                    <td>{{ result.answer.question6 or '-' }}</td>
+                    <td>{{ result.answer.question7 or '-' }}</td>
+                    <td>{{ result.answer.question8 or '-' }}</td>
+                    <td>{{ result.answer.question9 or '-' }}</td>
+                    <td>{{ result.answer.question10 or '-' }}</td>
+                    <td>{{ result.accuracy|round(2) }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <form method="POST" action="{{ url_for('answer.delete_all') }}">
+        <button type="submit" class="delete-button">すべてのデータを削除</button>
+    </form>
 </body>
 </html>

@@ -7,8 +7,22 @@ answer = Blueprint(
     "answer",
     __name__,
     template_folder="templates",
-    static_folder="static",
+    static_folder="static",    
 )
+
+# 正解データを定義
+CORRECT_ANSWERS = {
+    "question1": "○",
+    "question2": "×",
+    "question3": "×",
+    "question4": "×",
+    "question5": "○",
+    "question6": "×",
+    "question7": "○",
+    "question8": "○",
+    "question9": "×",
+    "question10": "○",
+}
 
 @answer.route("/", methods=["GET", "POST"])
 def index():
@@ -44,14 +58,41 @@ def question(user_number, question_number):
         if question_number < 10:
             return redirect(url_for("answer.question", user_number=user_number, question_number=question_number + 1))
         else:
-            flash("全ての回答を送信しました", "success")
-            return redirect(url_for("answer.list_answers"))
-
+            return redirect(url_for("answer.thanks"))
     return render_template("answer/question.html", form=form, question_number=question_number)
 
+@answer.route("/thanks")
+def thanks():
+    return render_template("answer/thanks.html")
 
 @answer.route("/list")
 def list_answers():
-    # 全ての回答を取得
     answers = Answer.query.all()
-    return render_template("answer/list.html", answers=answers)
+
+    # 各回答の一致率を計算
+    results = []
+    for ans in answers:
+        total_questions = 0
+        correct_count = 0
+        for key, correct_value in CORRECT_ANSWERS.items():
+            user_answer = getattr(ans, key)
+            if user_answer is not None:  # Null を除外
+                total_questions += 1
+                if user_answer == correct_value:
+                    correct_count += 1
+        accuracy = (correct_count / total_questions * 100) if total_questions > 0 else 0
+        results.append({"answer": ans, "accuracy": accuracy})
+
+    # 一致率で降順に並び替え
+    results = sorted(results, key=lambda x: x["accuracy"], reverse=True)
+
+    return render_template("answer/list.html", results=results)
+
+
+@answer.route("/delete_all", methods=["POST"])
+def delete_all():
+    # データベースのすべてのレコードを削除
+    Answer.query.delete()
+    db.session.commit()
+    flash("すべてのデータを削除しました", "success")
+    return redirect(url_for("answer.list_answers"))

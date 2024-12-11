@@ -1,6 +1,6 @@
 from flask import Flask
 from pathlib import Path
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 
@@ -28,3 +28,9 @@ def create_app():
     app.register_blueprint(answer_views.answer, url_prefix="/answer")
 
     return app
+
+if __name__ == "__main__":
+    app = create_app()
+    with app.app_context():
+        upgrade()  # マイグレーションを適用
+    app.run(host="0.0.0.0", port=8080)

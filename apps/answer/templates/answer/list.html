@@ -1,33 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Answer List</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <title>回答一覧</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        td {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Answer List</h1>
-        <table class="table table-bordered">
-            <thead>
+    <h1>回答一覧</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>班番号</th>
+                <th>質問1</th>
+                <th>質問2</th>
+                <th>質問3</th>
+                <th>質問4</th>
+                <th>質問5</th>
+                <th>質問6</th>
+                <th>質問7</th>
+                <th>質問8</th>
+                <th>質問9</th>
+                <th>質問10</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for answer in answers %}
                 <tr>
-                    <th>ID</th>
-                    <th>User Number</th>
-                    <th>Created At</th>
+                    <td>{{ answer.user_number }}</td>
+                    <td>{{ answer.question1 or '-' }}</td>
+                    <td>{{ answer.question2 or '-' }}</td>
+                    <td>{{ answer.question3 or '-' }}</td>
+                    <td>{{ answer.question4 or '-' }}</td>
+                    <td>{{ answer.question5 or '-' }}</td>
+                    <td>{{ answer.question6 or '-' }}</td>
+                    <td>{{ answer.question7 or '-' }}</td>
+                    <td>{{ answer.question8 or '-' }}</td>
+                    <td>{{ answer.question9 or '-' }}</td>
+                    <td>{{ answer.question10 or '-' }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for answer in answers %}
-                    <tr>
-                        <td>{{ answer.id }}</td>
-                        <td>{{ answer.user_number }}</td>
-                        <td>{{ answer.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <a href="/" class="btn btn-primary mt-3">Back to Form</a>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

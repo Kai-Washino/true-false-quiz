@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>質問 {{ question_number }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .radio-button {
+            display: none; /* ラジオボタンを隠す */
+        }
+
+        .button-label {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 24px;
+            color: #555;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .button-label:hover {
+            border-color: #007BFF;
+            color: #007BFF;
+        }
+
+        .radio-button:checked + .button-label {
+            background-color: #007BFF;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        .submit-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>質問 {{ question_number }}</h1>
+    <p>この質問に ○ または × で回答してください。</p>
+    <form method="POST" action="{{ url_for('answer.question', user_number=request.view_args['user_number'], question_number=question_number) }}">
+        {{ form.hidden_tag() }}
+        <div class="button-container">
+            {% for subfield in form.answer %}
+                <input type="radio" id="{{ subfield.id }}" name="{{ subfield.name }}" value="{{ subfield.data }}" class="radio-button">
+                <label for="{{ subfield.id }}" class="button-label">{{ subfield.label.text }}</label>
+            {% endfor %}
+        </div>
+        {% if form.answer.errors %}
+            <p style="color: red;">{{ form.answer.errors[0] }}</p>
+        {% endif %}
+        <button type="submit" class="submit-button">{{ form.submit.label }}</button>
+    </form>    
+</body>
+</html>

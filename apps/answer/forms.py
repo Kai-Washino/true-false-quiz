@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, RadioField, SubmitField
 from wtforms.validators import DataRequired, Length
 
-class AnswerForm(FlaskForm):
+class UserNumberForm(FlaskForm):
     user_number = StringField(
         "班番号",
         validators=[
@@ -11,3 +11,11 @@ class AnswerForm(FlaskForm):
         ],
     )
     submit = SubmitField("決定")
+
+class QuestionForm(FlaskForm):
+    answer = RadioField(
+        "回答",
+        choices=[("○", "○"), ("×", "×")],
+        validators=[DataRequired(message="回答を選択してください")],
+    )
+    submit = SubmitField("次へ")
